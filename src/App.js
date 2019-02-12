@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { connect} from 'react-redux';
+import { updateUser } from './redux/actions/UserAction';
 
 class App extends Component {
+
+  constructor(props){
+    super(props);
+    this.onUpdateUser = this.onUpdateUser.bind(this);
+  }
+
+  onUpdateUser(event){
+    this.props.onUpdateUser(event.target.value)
+  }
+
   render() {
+    console.log(this.props);
     return (
       <div className="App">
         <header className="App-header">
@@ -17,12 +30,33 @@ class App extends Component {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Learn React
+            Learn React 
           </a>
+
+          <div onClick={this.onUpdateUser}>
+            Update The User
+            
+          </div>
+          <div>
+            <input onChange={this.onUpdateUser}/>
+          </div>
+          <div>
+            New User Entered: {this.props.user}
+          </div>
+          
         </header>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  products: state.products,
+  user: state.user
+});
+
+const mapActionsToProps = {
+  onUpdateUser: updateUser
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(App);
